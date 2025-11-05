@@ -1,789 +1,824 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CITEC PORTAL (HTML Only)</title>
-    <style>
-        /* Base styles for the modal */
-        .modal {
-            position: fixed;
-            top: 0;
-            right: 0;
-            bottom: 0;
-            left: 0;
-            background: rgba(0, 0, 0, 0.8);
-            z-index: 99999;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CITEC PORTAL (HTML Only)</title>
+    <style>
+        /* Base styles for the modal */
+        .modal {
+            position: fixed;
+            top: 0;
+            right: 0;
+            bottom: 0;
+            left: 0;
+            background: rgba(0, 0, 0, 0.8);
+            z-index: 99999;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
 
-        /* Target the modal when its ID is in the URL hash (from clicking the link) */
-        .modal:target {
-            opacity: 1;
-            pointer-events: auto;
-        }
+        /* Target the modal when its ID is in the URL hash (from clicking the link) */
+        .modal:target {
+            opacity: 1;
+            pointer-events: auto;
+        }
 
-        /* Modal content box styling */
-        .modal-content {
-            width: 80%;
-            max-width: 700px;
-            position: relative;
-            margin: 10% auto;
-            padding: 30px;
-            background: #fff;
-            border-radius: 8px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
-            max-height: 80vh; /* Limit height */
-            overflow-y: auto; /* Enable scrolling for content */
-        }
+        /* Modal content box styling */
+        .modal-content {
+            width: 80%;
+            max-width: 700px;
+            position: relative;
+            /* ADJUSTMENT HERE: Changed 10% to 5% to lift the modal up */
+            margin: 5% auto;
+            padding: 30px;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            /* ADJUSTMENT HERE: Increased max-height to 90% of viewport to allow more content visibility */
+            max-height: 90vh; /* Limit height */
+            overflow-y: auto; /* Enable scrolling for content */
+        }
 
-        /* Close button styling */
-        .modal-close {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            color: #aaa;
-            text-decoration: none;
-            font-size: 30px;
-            font-weight: bold;
-        }
-        .modal-close:hover {
-            color: #777;
-        }
+        /* Close button styling */
+        .modal-close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            color: #aaa;
+            text-decoration: none;
+            font-size: 30px;
+            font-weight: bold;
+        }
+        .modal-close:hover {
+            color: #777;
+        }
 
-        /* Specific styles for the content within the modal */
-        .modal h2 {
-            color: #a32a2c; /* UB Primary Color */
-            border-bottom: 2px solid #f0ad4e;
-            padding-bottom: 5px;
-            margin-top: 20px;
-        }
-        .modal h2:first-child {
-            margin-top: 0;
-        }
-        .modal strong {
-            color: #a32a2c;
-        }
-        .core-values-list {
-            list-style-type: none;
-            padding-left: 0;
-        }
-        .core-values-list li {
-            margin-bottom: 5px;
-        }
-        /* Style for Objective List */
-        .objectives-list {
-            list-style-type: decimal;
-            padding-left: 20px;
-        }
-        .objectives-list li {
-            margin-bottom: 8px;
-        }
-        /* Style for the image in the header */
-        .header-logo {
-            vertical-align: middle;
-            margin-right: 10px;
-            height: 40px; /* Adjust height to fit the header row */
-            width: auto;
-        }
-        
-        /* New styles for the tab-like boxes to match the image */
-        .tab-container {
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #f0f0f5; /* Light grey background */
-            border-radius: 8px;
-            padding: 10px;
-        }
-        .tab {
-            padding: 15px 30px;
-            margin: 0 5px;
-            color: #2c2c2c;
-            font-size: 18px;
-            font-weight: 500;
-            text-decoration: none;
-            display: block;
-            border-radius: 5px;
-            text-align: center;
-        }
-        .tab-active {
-            background-color: #ffffff;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-            font-weight: bold;
-        }
-        .tab-inactive {
-            color: #5a6268;
-        }
-        
-        /* Specific styling for the prerequisite list */
-        .prereq-list {
-            list-style: none;
-            padding: 0;
-        }
-        .prereq-list li {
-            background-color: #f9f9f9;
-            padding: 10px;
-            margin-bottom: 8px;
-            border-left: 4px solid #a32a2c;
-            border-radius: 4px;
-            font-size: 15px;
-        }
-        /* Specific styling for the continuation table */
-        .continuation-table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-            font-size: 15px;
-        }
-        .continuation-table th, .continuation-table td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
-        .continuation-table th {
-            background-color: #a32a2c;
-            color: white;
-            text-align: center;
-        }
-        .continuation-table td:nth-child(1) {
-            font-weight: bold;
-            color: #333;
-        }
+        /* Specific styles for the content within the modal */
+        .modal h2 {
+            color: #a32a2c; /* UB Primary Color */
+            border-bottom: 2px solid #f0ad4e;
+            padding-bottom: 5px;
+            margin-top: 20px;
+        }
+        .modal h2:first-child {
+            margin-top: 0;
+        }
+        .modal strong {
+            color: #a32a2c;
+        }
+        .core-values-list {
+            list-style-type: none;
+            padding-left: 0;
+        }
+        .core-values-list li {
+            margin-bottom: 5px;
+        }
+        /* Style for Objective List */
+        .objectives-list {
+            list-style-type: decimal;
+            padding-left: 20px;
+        }
+        .objectives-list li {
+            margin-bottom: 8px;
+        }
+        /* Style for the image in the header */
+        .header-logo {
+            vertical-align: middle;
+            margin-right: 10px;
+            height: 40px; /* Adjust height to fit the header row */
+            width: auto;
+        }
+        
+        /* New styles for the tab-like boxes to match the image */
+        .tab-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f5; /* Light grey background */
+            border-radius: 8px;
+            padding: 10px;
+        }
+        .tab {
+            padding: 15px 30px;
+            margin: 0 5px;
+            color: #2c2c2c;
+            font-size: 18px;
+            font-weight: 500;
+            text-decoration: none;
+            display: block;
+            border-radius: 5px;
+            text-align: center;
+        }
+        .tab-active {
+            background-color: #ffffff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            font-weight: bold;
+        }
+        .tab-inactive {
+            color: #5a6268;
+        }
+        
+        /* Specific styling for the prerequisite list */
+        .prereq-list {
+            list-style: none;
+            padding: 0;
+        }
+        .prereq-list li {
+            background-color: #f9f9f9;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-left: 4px solid #a32a2c;
+            border-radius: 4px;
+            font-size: 15px;
+        }
+        /* Specific styling for the continuation table */
+        .continuation-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+            font-size: 15px;
+        }
+        .continuation-table th, .continuation-table td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        .continuation-table th {
+            background-color: #a32a2c;
+            color: white;
+            text-align: center;
+        }
+        .continuation-table td:nth-child(1) {
+            font-weight: bold;
+            color: #333;
+        }
 
-    </style>
+    </style>
 </head>
 <body style="font-family: Arial, sans-serif; margin: 0; background-color: #ffffff;">
 
-    <table width="100%" border="0" cellpadding="0" cellspacing="0">
+    <table width="100%" border="0" cellpadding="0" cellspacing="0">
 
-        <tr>
-            <td bgcolor="#a32a2c" height="60" valign="middle">
-                <table width="90%" align="center" border="0" cellpadding="10" cellspacing="0">
-                    <tr>
-                        <td width="100%" style="color: white; font-size: 24px; font-weight: bold;">
-                            <img src="citeclogo.jpg" alt="UB CITEC Logo" class="header-logo">
-                            CITEC PORTAL
-                        </td>
-                    </tr>
-                </table>
-            </td>
-        </tr>
+        <tr>
+            <td bgcolor="#a32a2c" height="60" valign="middle">
+                <table width="90%" align="center" border="0" cellpadding="10" cellspacing="0">
+                    <tr>
+                        <td width="100%" style="color: white; font-size: 24px; font-weight: bold;">
+                            <img src="citeclogo.jpg" alt="UB CITEC Logo" class="header-logo">
+                            CITEC PORTAL
+                        </td>
+                    </tr>
+                </table>
+            </td>
+        </tr>
 
-        <tr>
-            <td align="center" style="padding: 80px 20px 60px;">
-                <h1 style="font-size: 38px; color: #2c2c2c; margin-bottom: 10px;">
-                    Welcome to the CITEC Web Portal
-                </h1>
-                <p style="font-size: 18px; color: #555; margin-bottom: 30px;">
-                    Connecting technology, creativity, and innovation —<br>all in one platform.
-                </p>
-                <table width="90%" align="center" border="0" cellpadding="20" cellspacing="0" style="max-width: 800px; text-align: left; background-color: #f9f9f9; border-radius: 8px;">
-                    <tr>
-                        <td>
-                            <h2 style="color: #a32a2c; margin-top: 0; border-bottom: 2px solid #a32a2c; padding-bottom: 5px;">About CITEC</h2>
-                            <p style="font-size: 16px; color: #333; line-height: 1.6;">
-                                Established in 2019, the College of Information Technology, Entertainment, and Communication (CITEC) is one of the newest additions to UBLC. It originated as a small department offering the Bachelor of Science in Information Technology and played a pivotal role as one of UBLC’s pioneer programs back in 2011. The introduction of the Bachelor in Multimedia Arts program paved the way for the establishment of this thriving college.
-                            </p>
-                            <p style="font-size: 16px; color: #333; line-height: 1.6;">
-                                CITEC is committed to nurturing critical thinkers, fostering research-oriented minds, and empowering individuals with creativity and innovation. We aim to shape our students into skilled professionals who can analyze complex organizational challenges, design innovative solutions, and contribute to technological advancements in the fields of information technology, entertainment, and communication.
-                            </p>
-                            <p style="font-size: 16px; color: #333; line-height: 1.6;">
-                                At CITEC, we believe in unleashing the full potential of our students through experiential learning. Our dedicated and highly qualified faculty members serve as mentors, inspiring each student to achieve their best. We provide an environment conducive to learning because, at UBLC, CITEC is where technology meets creativity.
-                            </p>
-                            <p style="font-size: 16px; color: #a32a2c; font-weight: bold; line-height: 1.6;">
-                                Discover boundless opportunities for growth, creativity, and technological excellence at the College of Information Technology, Entertainment, and Communication. Welcome to a dynamic learning experience!
-                            </p>
-                        </td>
-                    </tr>
-                </table>
-                </td>
-        </tr>
+        <tr>
+            <td align="center" style="padding: 80px 20px 60px;">
+                <h1 style="font-size: 38px; color: #2c2c2c; margin-bottom: 10px;">
+                    Welcome to the CITEC Web Portal
+                </h1>
+                <p style="font-size: 18px; color: #555; margin-bottom: 30px;">
+                    Connecting technology, creativity, and innovation —<br>all in one platform.
+                </p>
+                <table width="90%" align="center" border="0" cellpadding="20" cellspacing="0" style="max-width: 800px; text-align: left; background-color: #f9f9f9; border-radius: 8px;">
+                    <tr>
+                        <td>
+                            <h2 style="color: #a32a2c; margin-top: 0; border-bottom: 2px solid #a32a2c; padding-bottom: 5px;">About CITEC</h2>
+                            <p style="font-size: 16px; color: #333; line-height: 1.6;">
+                                Established in 2019, the College of Information Technology, Entertainment, and Communication (CITEC) is one of the newest additions to UBLC. It originated as a small department offering the Bachelor of Science in Information Technology and played a pivotal role as one of UBLC’s pioneer programs back in 2011. The introduction of the Bachelor in Multimedia Arts program paved the way for the establishment of this thriving college.
+                            </p>
+                            <p style="font-size: 16px; color: #333; line-height: 1.6;">
+                                CITEC is committed to nurturing critical thinkers, fostering research-oriented minds, and empowering individuals with creativity and innovation. We aim to shape our students into skilled professionals who can analyze complex organizational challenges, design innovative solutions, and contribute to technological advancements in the fields of information technology, entertainment, and communication.
+                            </p>
+                            <p style="font-size: 16px; color: #333; line-height: 1.6;">
+                                At CITEC, we believe in unleashing the full potential of our students through experiential learning. Our dedicated and highly qualified faculty members serve as mentors, inspiring each student to achieve their best. We provide an environment conducive to learning because, at UBLC, CITEC is where technology meets creativity.
+                            </p>
+                            <p style="font-size: 16px; color: #a32a2c; font-weight: bold; line-height: 1.6;">
+                                Discover boundless opportunities for growth, creativity, and technological excellence at the College of Information Technology, Entertainment, and Communication. Welcome to a dynamic learning experience!
+                            </p>
+                        </td>
+                    </tr>
+                </table>
+                </td>
+        </tr>
 
-        <tr>
-            <td align="center" style="padding: 20px 20px 80px;">
-                <div class="tab-container" style="width: 90%; max-width: 800px;">
-                    <a href="#subjects-modal" class="tab tab-inactive">Subjects</a>
-                    <a href="#prerequisites-modal" class="tab tab-inactive">Prerequisites</a>
-                    <a href="#capstone-modal" class="tab tab-inactive">Capstone</a>
-                    <a href="#continuation-modal" class="tab tab-active">Continuation</a>
-                </div>
-                </td>
-        </tr>
+        <tr>
+            <td align="center" style="padding: 20px 20px 80px;">
+                <div class="tab-container" style="width: 90%; max-width: 800px;">
+                    <a href="#subjects-modal" class="tab tab-inactive">Subjects</a>
+                    <a href="#prerequisites-modal" class="tab tab-inactive">Prerequisites</a>
+                    <a href="#capstone-modal" class="tab tab-inactive">Capstone</a>
+                    <a href="#continuation-modal" class="tab tab-active">Continuation</a>
+                </div>
+                </td>
+        </tr>
 
-        <tr>
-            <td align="center" style="padding: 20px; font-size: 14px; color: #6c757d; border-top: 1px solid #eee;">
-                &copy; 2025 University of Batangas Learning Center | GCIT / CITEC
-            </td>
-        </tr>
+        <tr>
+            <td align="center" style="padding: 20px; font-size: 14px; color: #6c757d; border-top: 1px solid #eee;">
+                &copy; 2025 University of Batangas Learning Center | GCIT / CITEC
+            </td>
+        </tr>
 
-    </table>
+    </table>
 
-    <div id="ub-values-modal" class="modal">
-        <div class="modal-content">
-            <a href="#" title="Close" class="modal-close">&times;</a>
-            <h1 style="color: #a32a2c; text-align: center;">University of Batangas Guiding Principles</h1>
-            <p style="text-align: center; color: #555;">Learn about the foundations that shape every UBian's education and future.</p>
+    <div id="ub-values-modal" class="modal">
+        <div class="modal-content">
+            <a href="#" title="Close" class="modal-close">&times;</a>
+            <h1 style="color: #a32a2c; text-align: center;">University of Batangas Guiding Principles</h1>
+            <p style="text-align: center; color: #555;">Learn about the foundations that shape every UBian's education and future.</p>
 
-            <h2 id="vision">Vision</h2>
-            <p>We envision the University of Batangas to be a center of educational excellence committed to serve the broader community.</p>
+            <h2 id="vision">Vision</h2>
+            <p>We envision the University of Batangas to be a center of educational excellence committed to serve the broader community.</p>
 
-            <h2 id="mission">Mission</h2>
-            <p>The University of Batangas provides quality education by promoting personal and professional growth, thus enabling the person to participate in a global, technology and research-driven environment.</p>
+            <h2 id="mission">Mission</h2>
+            <p>The University of Batangas provides quality education by promoting personal and professional growth, thus enabling the person to participate in a global, technology and research-driven environment.</p>
 
-            <h2 id="philosophy">Philosophy</h2>
-            <p>The University of Batangas, a stock non-sectarian, private educational institution, believes in the pursuit of knowledge, values and skills necessary for the preservation and improvement of the Philippine society. It has faith in the dignity of the human person, in the democratic process, in the reward for individual excellence, and in the freedom of a person to worship God according to his conscience. Thus, the institution believes that the development of the individual as a person and worker is an effective means in building a better family, community and nation, and a better world.</p>
+            <h2 id="philosophy">Philosophy</h2>
+            <p>The University of Batangas, a stock non-sectarian, private educational institution, believes in the pursuit of knowledge, values and skills necessary for the preservation and improvement of the Philippine society. It has faith in the dignity of the human person, in the democratic process, in the reward for individual excellence, and in the freedom of a person to worship God according to his conscience. Thus, the institution believes that the development of the individual as a person and worker is an effective means in building a better family, community and nation, and a better world.</p>
 
-            <h2 id="objectives">Objectives</h2>
-            <ol class="objectives-list">
-                <li>Pursue educational excellence in traditional and other modes of instructional delivery</li>
-                <li>Promote well-being through an integrated process that will enhance human character and dignity</li>
-                <li>Engage in community services through varied educational, health, economic and environmental projects</li>
-                <li>Ensure institutional improvement through dynamic programs for human, physical, financial and technology resources</li>
-                <li>Adopt global perspective to achieve international competitiveness</li>
-                <li>Commit to productivity and innovation in research, scholarly and creative activities relevant to national development</li>
-                <li>Maintain student leadership in academic and co-curricular activities in South Luzon</li>
-            </ol>
+            <h2 id="objectives">Objectives                </h2>
+            <ol class="objectives-list">
+                <li>Pursue educational excellence in traditional and other modes of instructional delivery</li>
+                <li>Promote well-being through an integrated process that will enhance human character and dignity</li>
+                <li>Engage in community services through varied educational, health, economic and environmental projects</li>
+                <li>Ensure institutional improvement through dynamic programs for human, physical, financial and technology resources</li>
+                <li>Adopt global perspective to achieve international competitiveness</li>
+                <li>Commit to productivity and innovation in research, scholarly and creative activities relevant to national development</li>
+                <li>Maintain student leadership in academic and co-curricular activities in South Luzon</li>
+            </ol>
 
-            <h2 id="core-values">Core Values</h2>
-            <p>Every UBian is expected to possess the UB Core Values:</p>
-            <ul class="core-values-list">
-                <li><strong style="font-size: 1.1em;">– Faith in God</strong> (Spirit)</li>
-                <li><strong style="font-size: 1.1em;">– Love of Wisdom</strong> (Intellect)</li>
-                <li><strong style="font-size: 1.1em;">– Service to Fellowmen</strong> (Purpose)</li>
-            </ul>
+            <h2 id="core-values">Core Values</h2>
+            <p>Every UBian is expected to possess the UB Core Values:</p>
+            <ul class="core-values-list">
+                <li><strong style="font-size: 1.1em;">– Faith in God</strong> (Spirit)</li>
+                <li><strong style="font-size: 1.1em;">– Love of Wisdom</strong> (Intellect)</li>
+                <li><strong style="font-size: 1.1em;">– Service to Fellowmen</strong> (Purpose)</li>
+            </ul>
 
-            <h2 id="ub-attributes">UB Attributes (BEST)</h2>
-            <p>The University of Batangas seeks to bring out the **BEST** version of each student.</p>
-            <ul class="core-values-list">
-                <li><strong style="font-size: 1.1em;">Builder and Innovator of Knowledge</strong></li>
-                <li><strong style="font-size: 1.1em;">Efficient professional and effective communicator</strong></li>
-                <li><strong style="font-size: 1.1em;">Social, moral and global-minded citizen</strong></li>
-                <li><strong style="font-size: 1.1em;">Transformed lifelong learner</strong></li>
-            </ul>
+            <h2 id="ub-attributes">UB Attributes (BEST)</h2>
+            <p>The University of Batangas seeks to bring out the **BEST** version of each student.</p>
+            <ul class="core-values-list">
+                <li><strong style="font-size: 1.1em;">Builder and Innovator of Knowledge</strong></li>
+                <li><strong style="font-size: 1.1em;">Efficient professional and effective communicator</strong></li>
+                <li><strong style="font-size: 1.1em;">Social, moral and global-minded citizen</strong></li>
+                <li><strong style="font-size: 1.1em;">Transformed lifelong learner</strong></li>
+            </ul>
 
-        </div>
-    </div>
+        </div>
+    </div>
 <div id="subjects-modal" class="modal">
-    <div class="modal-content" style="max-width: 900px;">
-        <a href="#" title="Close" class="modal-close">&times;</a>
-        <h1 style="color: #a32a2c; text-align: center;">Bachelor of Science in Information Technology Curriculum</h1>
-        <p style="text-align: center; color: #555;">Detailed list of subjects per year level and semester.</p>
+    <div class="modal-content" style="max-width: 900px;">
+        <a href="#" title="Close" class="modal-close">&times;</a>
+        <h1 style="color: #a32a2c; text-align: center;">Bachelor of Science in Information Technology Curriculum</h1>
+        <p style="text-align: center; color: #555;">Detailed list of subjects per year level and semester.</p>
 
-        <h2 style="color: #333; border-bottom: 2px solid #a32a2c; margin-top: 30px;">First Year</h2>
+        <h2 style="color: #333; border-bottom: 2px solid #a32a2c; margin-top: 30px;">First Year</h2>
 
-        <h3 style="color: #a32a2c; margin-top: 20px;">First Semester</h3>
-        <table width="100%" border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; margin-bottom: 20px; font-size: 14px;">
-            <thead>
-                <tr style="background-color: #f0f0f5;">
-                    <th width="15%" style="text-align: left;">Course Code</th>
-                    <th width="45%" style="text-align: left;">Course Description</th>
-                    <th width="10%" style="text-align: center;">Units</th>
-                    <th width="30%" style="text-align: left;">Pre/Co-requisite</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td style="text-align: left;">CC102T</td>
-                    <td style="text-align: left;">Introduction to Computing</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">-</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">CC100T</td>
-                    <td style="text-align: left;">Computer Programming</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">CC102T</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">RZL</td>
-                    <td style="text-align: left;">The Life and Works of Rizal</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">-</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">GE 103</td>
-                    <td style="text-align: left;">Art Appreciation</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">-</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">ETH</td>
-                    <td style="text-align: left;">Ethics</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">-</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">GE 101</td>
-                    <td style="text-align: left;">Understanding the Self</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">-</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">GE 104</td>
-                    <td style="text-align: left;">Mathematics in the Modern World</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">-</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">GE 105</td>
-                    <td style="text-align: left;">Purposive Communication</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">-</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">PE 1</td>
-                    <td style="text-align: left;">Movement Competency Training</td>
-                    <td style="text-align: center;">2</td>
-                    <td style="text-align: left;">-</td>
-                </tr>
-            </tbody>
-        </table>
+        <h3 style="color: #a32a2c; margin-top: 20px;">First Semester</h3>
+        <table width="100%" border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; margin-bottom: 20px; font-size: 14px;">
+            <thead>
+                <tr style="background-color: #f0f0f5;">
+                    <th width="15%" style="text-align: left;">Course Code</th>
+                    <th width="45%" style="text-align: left;">Course Description</th>
+                    <th width="10%" style="text-align: center;">Units</th>
+                    <th width="30%" style="text-align: left;">Pre/Co-requisite</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align: left;">CC102T</td>
+                    <td style="text-align: left;">Introduction to Computing</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">-</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">CC100T</td>
+                    <td style="text-align: left;">Computer Programming</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">CC102T</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">RZL</td>
+                    <td style="text-align: left;">The Life and Works of Rizal</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">-</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">GE 103</td>
+                    <td style="text-align: left;">Art Appreciation</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">-</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">ETH</td>
+                    <td style="text-align: left;">Ethics</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">-</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">GE 101</td>
+                    <td style="text-align: left;">Understanding the Self</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">-</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">GE 104</td>
+                    <td style="text-align: left;">Mathematics in the Modern World</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">-</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">GE 105</td>
+                    <td style="text-align: left;">Purposive Communication</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">-</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">PE 1</td>
+                    <td style="text-align: left;">Movement Competency Training</td>
+                    <td style="text-align: center;">2</td>
+                    <td style="text-align: left;">-</td>
+                </tr>
+            </tbody>
+        </table>
 
-        <h3 style="color: #a32a2c; margin-top: 20px;">Second Semester</h3>
-        <table width="100%" border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; margin-bottom: 20px; font-size: 14px;">
-            <thead>
-                <tr style="background-color: #f0f0f5;">
-                    <th width="15%" style="text-align: left;">Course Code</th>
-                    <th width="45%" style="text-align: left;">Course Description</th>
-                    <th width="10%" style="text-align: center;">Units</th>
-                    <th width="30%" style="text-align: left;">Pre/Co-requisite</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td style="text-align: left;">GE 102</td>
-                    <td style="text-align: left;">Readings in Philippine History</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">-</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">GE 106</td>
-                    <td style="text-align: left;">The Contemporary World</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">-</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">GE 108</td>
-                    <td style="text-align: left;">Science, Technology, and Society</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">-</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">CC 104T</td>
-                    <td style="text-align: left;">Data Structures and Algorithms</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">CC100T</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">EL 101T</td>
-                    <td style="text-align: left;">Discrete Mathematics</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">GE 104</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">CC 105T</td>
-                    <td style="text-align: left;">OOP</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">CC100T</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">PE 2</td>
-                    <td style="text-align: left;">Fitness Exercises</td>
-                    <td style="text-align: center;">2</td>
-                    <td style="text-align: left;">PE 1</td>
-                </tr>
-            </tbody>
-        </table>
+        <h3 style="color: #a32a2c; margin-top: 20px;">Second Semester</h3>
+        <table width="100%" border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; margin-bottom: 20px; font-size: 14px;">
+            <thead>
+                <tr style="background-color: #f0f0f5;">
+                    <th width="15%" style="text-align: left;">Course Code</th>
+                    <th width="45%" style="text-align: left;">Course Description</th>
+                    <th width="10%" style="text-align: center;">Units</th>
+                    <th width="30%" style="text-align: left;">Pre/Co-requisite</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align: left;">GE 102</td>
+                    <td style="text-align: left;">Readings in Philippine History</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">-</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">GE 106</td>
+                    <td style="text-align: left;">The Contemporary World</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">-</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">GE 108</td>
+                    <td style="text-align: left;">Science, Technology, and Society</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">-</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">CC 104T</td>
+                    <td style="text-align: left;">Data Structures and Algorithms</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">CC100T</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">EL 101T</td>
+                    <td style="text-align: left;">Discrete Mathematics</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">GE 104</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">CC 105T</td>
+                    <td style="text-align: left;">OOP</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">CC100T</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">PE 2</td>
+                    <td style="text-align: left;">Fitness Exercises</td>
+                    <td style="text-align: center;">2</td>
+                    <td style="text-align: left;">PE 1</td>
+                </tr>
+            </tbody>
+        </table>
 
-        <h2 style="color: #333; border-bottom: 2px solid #a32a2c; margin-top: 30px;">Second Year</h2>
+        <h2 style="color: #333; border-bottom: 2px solid #a32a2c; margin-top: 30px;">Second Year</h2>
 
-        <h3 style="color: #a32a2c; margin-top: 20px;">First Semester</h3>
-        <table width="100%" border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; margin-bottom: 20px; font-size: 14px;">
-            <thead>
-                <tr style="background-color: #f0f0f5;">
-                    <th width="15%" style="text-align: left;">Course Code</th>
-                    <th width="45%" style="text-align: left;">Course Description</th>
-                    <th width="10%" style="text-align: center;">Units</th>
-                    <th width="30%" style="text-align: left;">Pre/Co-requisite</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td style="text-align: left;">IT 201T</td>
-                    <td style="text-align: left;">Networking 1</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">CC102T</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">IT 202T</td>
-                    <td style="text-align: left;">Info Management</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">CC102T</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">IT 203T</td>
-                    <td style="text-align: left;">Application Development and Emerging Technologies</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">CC105T</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">GE 109</td>
-                    <td style="text-align: left;">People and the Earth's Ecosystem</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">-</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">IT 204T</td>
-                    <td style="text-align: left;">Web Development 1</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">CC105T</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">PE 3</td>
-                    <td style="text-align: left;">Individual and Dual Sports</td>
-                    <td style="text-align: center;">2</td>
-                    <td style="text-align: left;">PE 2</td>
-                </tr>
-            </tbody>
-        </table>
+        <h3 style="color: #a32a2c; margin-top: 20px;">First Semester</h3>
+        <table width="100%" border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; margin-bottom: 20px; font-size: 14px;">
+            <thead>
+                <tr style="background-color: #f0f0f5;">
+                    <th width="15%" style="text-align: left;">Course Code</th>
+                    <th width="45%" style="text-align: left;">Course Description</th>
+                    <th width="10%" style="text-align: center;">Units</th>
+                    <th width="30%" style="text-align: left;">Pre/Co-requisite</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align: left;">IT 201T</td>
+                    <td style="text-align: left;">Networking 1</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">CC102T</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">IT 202T</td>
+                    <td style="text-align: left;">Info Management</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">CC102T</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">IT 203T</td>
+                    <td style="text-align: left;">Application Development and Emerging Technologies</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">CC105T</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">GE 109</td>
+                    <td style="text-align: left;">People and the Earth's Ecosystem</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">-</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">IT 204T</td>
+                    <td style="text-align: left;">Web Development 1</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">CC105T</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">PE 3</td>
+                    <td style="text-align: left;">Individual and Dual Sports</td>
+                    <td style="text-align: center;">2</td>
+                    <td style="text-align: left;">PE 2</td>
+                </tr>
+            </tbody>
+        </table>
 
-        <h3 style="color: #a32a2c; margin-top: 20px;">Second Semester</h3>
-        <table width="100%" border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; margin-bottom: 20px; font-size: 14px;">
-            <thead>
-                <tr style="background-color: #f0f0f5;">
-                    <th width="15%" style="text-align: left;">Course Code</th>
-                    <th width="45%" style="text-align: left;">Course Description</th>
-                    <th width="10%" style="text-align: center;">Units</th>
-                    <th width="30%" style="text-align: left;">Pre/Co-requisite</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td style="text-align: left;">IT 205T</td>
-                    <td style="text-align: left;">Networking 2</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">IT 201T</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">IT 206T</td>
-                    <td style="text-align: left;">System Analysis and Design</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">IT 202T</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">IT 207T</td>
-                    <td style="text-align: left;">Web Development 2</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">IT 204T</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">GE 107</td>
-                    <td style="text-align: left;">General Psychology</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">-</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">IT 208T</td>
-                    <td style="text-align: left;">Platform Technologies</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">IT 203T</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">PE 4</td>
-                    <td style="text-align: left;">Team Sports</td>
-                    <td style="text-align: center;">2</td>
-                    <td style="text-align: left;">PE 3</td>
-                </tr>
-            </tbody>
-        </table>
+        <h3 style="color: #a32a2c; margin-top: 20px;">Second Semester</h3>
+        <table width="100%" border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; margin-bottom: 20px; font-size: 14px;">
+            <thead>
+                <tr style="background-color: #f0f0f5;">
+                    <th width="15%" style="text-align: left;">Course Code</th>
+                    <th width="45%" style="text-align: left;">Course Description</th>
+                    <th width="10%" style="text-align: center;">Units</th>
+                    <th width="30%" style="text-align: left;">Pre/Co-requisite</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align: left;">IT 205T</td>
+                    <td style="text-align: left;">Networking 2</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">IT 201T</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">IT 206T</td>
+                    <td style="text-align: left;">System Analysis and Design</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">IT 202T</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">IT 207T</td>
+                    <td style="text-align: left;">Web Development 2</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">IT 204T</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">GE 107</td>
+                    <td style="text-align: left;">General Psychology</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">-</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">IT 208T</td>
+                    <td style="text-align: left;">Platform Technologies</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">IT 203T</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">PE 4</td>
+                    <td style="text-align: left;">Team Sports</td>
+                    <td style="text-align: center;">2</td>
+                    <td style="text-align: left;">PE 3</td>
+                </tr>
+            </tbody>
+        </table>
 
-        <h2 style="color: #333; border-bottom: 2px solid #a32a2c; margin-top: 30px;">Third Year</h2>
+        <h2 style="color: #333; border-bottom: 2px solid #a32a2c; margin-top: 30px;">Third Year</h2>
 
-        <h3 style="color: #a32a2c; margin-top: 20px;">First Semester</h3>
-        <table width="100%" border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; margin-bottom: 20px; font-size: 14px;">
-            <thead>
-                <tr style="background-color: #f0f0f5;">
-                    <th width="15%" style="text-align: left;">Course Code</th>
-                    <th width="45%" style="text-align: left;">Course Description</th>
-                    <th width="10%" style="text-align: center;">Units</th>
-                    <th width="30%" style="text-align: left;">Pre/Co-requisite</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td style="text-align: left;">IT 301T</td>
-                    <td style="text-align: left;">Integrative Programming</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">IT 207T</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">IT 302T</td>
-                    <td style="text-align: left;">Information Assurance and Security 1</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">IT 205T</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">IT 303T</td>
-                    <td style="text-align: left;">Operating System</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">CC 104T</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">IT 304T</td>
-                    <td style="text-align: left;">Technical Documentation</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">IT 206T</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">IT 305T</td>
-                    <td style="text-align: left;">Quantitative Methods</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">-</td>
-                </tr>
-            </tbody>
-        </table>
+        <h3 style="color: #a32a2c; margin-top: 20px;">First Semester</h3>
+        <table width="100%" border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; margin-bottom: 20px; font-size: 14px;">
+            <thead>
+                <tr style="background-color: #f0f0f5;">
+                    <th width="15%" style="text-align: left;">Course Code</th>
+                    <th width="45%" style="text-align: left;">Course Description</th>
+                    <th width="10%" style="text-align: center;">Units</th>
+                    <th width="30%" style="text-align: left;">Pre/Co-requisite</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align: left;">IT 301T</td>
+                    <td style="text-align: left;">Integrative Programming</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">IT 207T</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">IT 302T</td>
+                    <td style="text-align: left;">Information Assurance and Security 1</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">IT 205T</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">IT 303T</td>
+                    <td style="text-align: left;">Operating System</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">CC 104T</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">IT 304T</td>
+                    <td style="text-align: left;">Technical Documentation</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">IT 206T</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">IT 305T</td>
+                    <td style="text-align: left;">Quantitative Methods</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">-</td>
+                </tr>
+            </tbody>
+        </table>
 
-        <h3 style="color: #a32a2c; margin-top: 20px;">Second Semester</h3>
-        <table width="100%" border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; margin-bottom: 20px; font-size: 14px;">
-            <thead>
-                <tr style="background-color: #f0f0f5;">
-                    <th width="15%" style="text-align: left;">Course Code</th>
-                    <th width="45%" style="text-align: left;">Course Description</th>
-                    <th width="10%" style="text-align: center;">Units</th>
-                    <th width="30%" style="text-align: left;">Pre/Co-requisite</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td style="text-align: left;">IT 306T</td>
-                    <td style="text-align: left;">IT Infrastructure and Migration</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">IT 303T</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">IT 307T</td>
-                    <td style="text-align: left;">Information Assurance and Security 2</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">IT 302T</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">IT 308T</td>
-                    <td style="text-align: left;">Human Computer Interaction</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">IT 301T</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">IT 309T</td>
-                    <td style="text-align: left;">IT Elective 1</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">IT 301T</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">IT 310T</td>
-                    <td style="text-align: left;">Mobile Programming</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">IT 301T</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">IT 311T</td>
-                    <td style="text-align: left;">IT Research 1</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">IT 305T</td>
-                </tr>
-            </tbody>
-        </table>
+        <h3 style="color: #a32a2c; margin-top: 20px;">Second Semester</h3>
+        <table width="100%" border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; margin-bottom: 20px; font-size: 14px;">
+            <thead>
+                <tr style="background-color: #f0f0f5;">
+                    <th width="15%" style="text-align: left;">Course Code</th>
+                    <th width="45%" style="text-align: left;">Course Description</th>
+                    <th width="10%" style="text-align: center;">Units</th>
+                    <th width="30%" style="text-align: left;">Pre/Co-requisite</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align: left;">IT 306T</td>
+                    <td style="text-align: left;">IT Infrastructure and Migration</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">IT 303T</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">IT 307T</td>
+                    <td style="text-align: left;">Information Assurance and Security 2</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">IT 302T</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">IT 308T</td>
+                    <td style="text-align: left;">Human Computer Interaction</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">IT 301T</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">IT 309T</td>
+                    <td style="text-align: left;">IT Elective 1</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">IT 301T</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">IT 310T</td>
+                    <td style="text-align: left;">Mobile Programming</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">IT 301T</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">IT 311T</td>
+                    <td style="text-align: left;">IT Research 1</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">IT 305T</td>
+                </tr>
+            </tbody>
+        </table>
 
-        <h2 style="color: #333; border-bottom: 2px solid #a32a2c; margin-top: 30px;">Fourth Year</h2>
+        <h2 style="color: #333; border-bottom: 2px solid #a32a2c; margin-top: 30px;">Fourth Year</h2>
 
-        <h3 style="color: #a32a2c; margin-top: 20px;">First Semester</h3>
-        <table width="100%" border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; margin-bottom: 20px; font-size: 14px;">
-            <thead>
-                <tr style="background-color: #f0f0f5;">
-                    <th width="15%" style="text-align: left;">Course Code</th>
-                    <th width="45%" style="text-align: left;">Course Description</th>
-                    <th width="10%" style="text-align: center;">Units</th>
-                    <th width="30%" style="text-align: left;">Pre/Co-requisite</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td style="text-align: left;">IT 401T</td>
-                    <td style="text-align: left;">IT Research 2</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">IT 311T</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">IT 402T</td>
-                    <td style="text-align: left;">Social and Professional Issues</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">GE 107</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">IT 403T</td>
-                    <td style="text-align: left;">IT Elective 2</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">IT 310T</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">IT 404T</td>
-                    <td style="text-align: left;">Technopreneurship</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">IT 304T</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">IT 405T</td>
-                    <td style="text-align: left;">Cloud Computing</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">IT 306T</td>
-                </tr>
-                <tr>
-                    <td style="text-align: left;">IT 406T</td>
-                    <td style="text-align: left;">Capstone Project</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">IT 311T</td>
-                </tr>
-            </tbody>
-        </table>
+        <h3 style="color: #a32a2c; margin-top: 20px;">First Semester</h3>
+        <table width="100%" border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; margin-bottom: 20px; font-size: 14px;">
+            <thead>
+                <tr style="background-color: #f0f0f5;">
+                    <th width="15%" style="text-align: left;">Course Code</th>
+                    <th width="45%" style="text-align: left;">Course Description</th>
+                    <th width="10%" style="text-align: center;">Units</th>
+                    <th width="30%" style="text-align: left;">Pre/Co-requisite</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align: left;">IT 401T</td>
+                    <td style="text-align: left;">IT Research 2</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">IT 311T</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">IT 402T</td>
+                    <td style="text-align: left;">Social and Professional Issues</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">GE 107</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">IT 403T</td>
+                    <td style="text-align: left;">IT Elective 2</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">IT 310T</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">IT 404T</td>
+                    <td style="text-align: left;">Technopreneurship</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">IT 304T</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">IT 405T</td>
+                    <td style="text-align: left;">Cloud Computing</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">IT 306T</td>
+                </tr>
+                <tr>
+                    <td style="text-align: left;">IT 406T</td>
+                    <td style="text-align: left;">Capstone Project</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">IT 311T</td>
+                </tr>
+            </tbody>
+        </table>
 
-        <h3 style="color: #a32a2c; margin-top: 20px;">Second Semester</h3>
-        <table width="100%" border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; margin-bottom: 20px; font-size: 14px;">
-            <thead>
-                <tr style="background-color: #f0f0f5;">
-                    <th width="15%" style="text-align: left;">Course Code</th>
-                    <th width="45%" style="text-align: left;">Course Description</th>
-                    <th width="10%" style="text-align: center;">Units</th>
-                    <th width="30%" style="text-align: left;">Pre/Co-requisite</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td style="text-align: left;">IT 407T</td>
-                    <td style="text-align: left;">Internship (OJT)</td>
-                    <td style="text-align: center;">3</td>
-                    <td style="text-align: left;">IT 402T</td>
-                </tr>
-            </tbody>
-        </table>
-
-    </div>
-</div>
-
-<div id="capstone-modal" class="modal">
-    <div class="modal-content">
-        <a href="#" title="Close" class="modal-close">&times;</a>
-        <h1 style="color: #a32a2c; text-align: center;">CITEC Capstone and Research Overview</h1>
-        <p style="text-align: center; color: #555;">Required steps for completing the final academic project.</p>
-        
-        <h2 style="color: #333; border-bottom: 2px solid #a32a2c; margin-top: 30px;">🎓 Capstone and IT Research Requirements</h2>
-
-        <p>The Capstone track for the BS Information Technology program involves three core components: <strong style="color:#d9534f;">IT Research I</strong> (IT 311T), <strong style="color:#d9534f;">IT Research II</strong> (IT 401T), and the final <strong style="color:#d9534f;">Capstone Project</strong> (IT 406T).</p>
-        
-        <h3 style="color: #a32a2c; margin-top: 20px;">IT Research 1 (IT 311T) - Proposal Phase</h3>
-        <p>This course focuses on the foundational work for the capstone project. Key activities include:</p>
-        <ul class="core-values-list">
-            <li>**Problem Identification:** Defining the scope and specific issues to be addressed.</li>
-            <li>**Literature Review:** Conducting an extensive review of related literature and studies.</li>
-            <li>**Proposal Writing:** Completing and getting approval for the initial research proposal.</li>
-        </ul>
-
-        <h3 style="color: #a32a2c; margin-top: 20px;">IT Research 2 (IT 401T) - Execution Phase</h3>
-        <p>This course is dedicated to the successful execution of the approved research proposal:</p>
-        <ul class="core-values-list">
-            <li>**Implementation:** Developing and implementing the proposed solution or system.</li>
-            <li>**Data Activities:** Conducting data gathering and detailed analysis of the results.</li>
-            <li>**Paper Completion:** Writing and finalizing the full research paper.</li>
-        </ul>
-
-        <h3 style="color: #a32a2c; margin-top: 20px;">Capstone Project (IT 406T) - Final Deliverable</h3>
-        <p>This is the final phase where the research output is translated into a functional deliverable, focusing on system development and deployment based on the Research II output. The critical requirements include:</p>
-        <ul class="core-values-list">
-            <li>**Formal Approval:** The final proposal must be formally approved by the <strong style="color:#d9534f;">Research and Capstone Office</strong> and the <strong style="color:#d9534f;">CITEC Dean</strong>.</li>
-            <li>**Project Presentation:** Requires a successful final presentation of the working system to the Capstone/Thesis panel.</li>
-            <li>**Final Submission:** Submitting a hardbound copy of the completed research paper and all system documentation.</li>
-        </ul>
-    </div>
+        <h3 style="color: #a32a2c; margin-top: 20px;">Second Semester</h3>
+        <table width="100%" border="1" cellpadding="10" cellspacing="0" style="border-collapse: collapse; margin-bottom: 20px; font-size: 14px;">
+            <thead>
+                <tr style="background-color: #f0f0f5;">
+                    <th width="15%" style="text-align: left;">Course Code</th>
+                    <th width="45%" style="text-align: left;">Course Description</th>
+                    <th width="10%" style="text-align: center;">Units</th>
+                    <th width="30%" style="text-align: left;">Pre/Co-requisite</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td style="text-align: left;">IT 407P</td>
+                    <td style="text-align: left;">OJT (On-the-Job Training)</td>
+                    <td style="text-align: center;">3</td>
+                    <td style="text-align: left;">IT 406T</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
 </div>
 
 <div id="prerequisites-modal" class="modal">
-    <div class="modal-content" style="max-width: 800px;">
-        <a href="#" title="Close" class="modal-close">&times;</a>
-        <h1 style="color: #a32a2c; text-align: center;">CITEC Module Prerequisites</h1>
-        <p style="text-align: center; color: #555;">Required modules that must be completed before enrolling in the next course.</p>
-        
-        <h2 style="color: #333; border-bottom: 2px solid #a32a2c; margin-top: 30px;">💻 Bachelor of Science in Information Technology</h2>
-        <ul class="prereq-list">
-            <li>**Intermediate Programming (CC103T):** Prerequisite: CC102T (Programming Fundamentals)</li>
-            <li>**Data Structures and Algorithms (CC104T):** Prerequisite: CC102T (Programming Fundamentals)</li>
-            <li>**Object-Oriented Programming (PF101):** Prerequisite: CC103T (Intermediate Programming)</li>
-            <li>**Information Management (CC105T):** Prerequisite: CC103T (Intermediate Programming)</li>
-            <li>**Networking 2 (NET102):** Prerequisite: NET101 (Networking 1)</li>
-            <li>**Information Assurance and Security 2 (IAS102):** Prerequisite: IAS101</li>
-            <li>**Fundamentals of Database System (IM101):** Prerequisite: CC105T</li>
-            <li>**Web System and Technologies (WS101):** Corequisite: HC 101</li>
-            <li>**Capstone Project and Research 2 (CAP102):** Prerequisite: CAP101</li>
-        </ul>
+    <div class="modal-content">
+        <a href="#" title="Close" class="modal-close">&times;</a>
+        <h1 style="color: #a32a2c; text-align: center;">Core Subject Prerequisites</h1>
+        <p style="text-align: center; color: #555;">The following major courses must be taken in sequential order.</p>
 
-        <h2 style="color: #333; border-bottom: 2px solid #a32a2c; margin-top: 30px;">🎨 Bachelor of Multimedia Arts</h2>
-        <ul class="prereq-list">
-            <li>**3D Animation (MMA317):** Prerequisite: MMA214 (Writing for New Media)</li>
-            <li>**Intermediate Computer Graphics (MMA312):** Prerequisite: MMA212 (Drawing 2)</li>
-            <li>**Typography and Layout (MMA314):** Corequisite: MMA212 (Drawing 2)</li>
-            <li>**Interactive Media Design (MMA318):** Prerequisite: MMA311 (Digital Photography)</li>
-            <li>**Thesis/Capstone Project 2 (THESIS2):** Prerequisite: THESIS1 (Thesis/Capstone Project 1)</li>
-            <li>**Internship (PRACT):** Prerequisite: 4th yr Standing</li>
-        </ul>
-    </div>
+        <ul class="prereq-list">
+            <li><strong>CC100T (Computer Programming)</strong> is a prerequisite for:
+                <ul>
+                    <li>CC 104T (Data Structures and Algorithms)</li>
+                    <li>CC 105T (OOP)</li>
+                </ul>
+            </li>
+            <li><strong>CC105T (OOP)</strong> is a prerequisite for:
+                <ul>
+                    <li>IT 203T (Application Development and Emerging Technologies)</li>
+                    <li>IT 204T (Web Development 1)</li>
+                </ul>
+            </li>
+            <li><strong>IT 204T (Web Development 1)</strong> is a prerequisite for:
+                <ul>
+                    <li>IT 207T (Web Development 2)</li>
+                </ul>
+            </li>
+            <li><strong>IT 207T (Web Development 2)</strong> is a prerequisite for:
+                <ul>
+                    <li>IT 301T (Integrative Programming)</li>
+                </ul>
+            </li>
+            <li><strong>IT 301T (Integrative Programming)</strong> is a prerequisite for:
+                <ul>
+                    <li>IT 308T (Human Computer Interaction)</li>
+                    <li>IT 309T (IT Elective 1)</li>
+                    <li>IT 310T (Mobile Programming)</li>
+                </ul>
+            </li>
+            <li>**IT 310T (Mobile Programming)** is a prerequisite for:
+                <ul>
+                    <li>IT 403T (IT Elective 2)</li>
+                </ul>
+            </li>
+        </ul>
+
+        <h2 style="color: #a32a2c;">IT Research Sequence</h2>
+        <ul class="prereq-list">
+            <li>**IT 305T (Quantitative Methods)** is a prerequisite for:
+                <ul>
+                    <li>IT 311T (IT Research 1)</li>
+                </ul>
+            </li>
+            <li>**IT 311T (IT Research 1)** is a prerequisite for:
+                <ul>
+                    <li>IT 401T (IT Research 2)</li>
+                    <li>IT 406T (Capstone Project)</li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</div>
+
+<div id="capstone-modal" class="modal">
+    <div class="modal-content">
+        <a href="#" title="Close" class="modal-close">&times;</a>
+        <h1 style="color: #a32a2c; text-align: center;">Capstone Project Guidelines (IT 406T)</h1>
+        <p style="text-align: center; color: #555;">Essential milestones for completing your final project.</p>
+
+        <h2 style="color: #333; border-bottom: 2px solid #a32a2c; margin-top: 30px;">Prerequisites & Requirements</h2>
+        <ul class="prereq-list">
+            <li>**Prerequisite:** Successful completion of **IT 311T (IT Research 1)**.</li>
+            <li>The Capstone Project must be an original work that integrates knowledge from core IT courses.</li>
+            <li>The project proposal must be approved by the IT Department Head and endorsed to the Dean.</li>
+            <li>Students must maintain regular consultation sessions with their assigned Capstone Project adviser.</li>
+        </ul>
+
+        <h2 style="color: #333; border-bottom: 2px solid #a32a2c;">Phases of the Capstone Project</h2>
+        <ol class="objectives-list">
+            <li>**Inception and Proposal (IT 311T Continuation):** Submission and defense of the initial project concept and feasibility study.</li>
+            <li>**System Design and Development:** Completion of detailed system architecture, coding, and unit testing.</li>
+            <li>**Midterm Presentation/Demonstration:** Presentation of the prototype or partial system implementation to the panel.</li>
+            <li>**Documentation and Finalization:** Completion of the technical and user documentation, ensuring all project components are final.</li>
+            <li>**Final Oral Defense:** Public presentation and defense of the complete system and documentation before a panel of experts. **A passing grade in this defense is mandatory** for graduation.</li>
+        </ol>
+
+        <h2 style="color: #a32a2c;">Project Focus Areas (Examples)</h2>
+        <ul class="core-values-list">
+            <li>Enterprise Resource Planning (ERP) Systems</li>
+            <li>Mobile Application Development</li>
+            <li>Network Infrastructure and Security Auditing Tools</li>
+            <li>Web-based Information Management Systems</li>
+        </ul>
+    </div>
 </div>
 
 <div id="continuation-modal" class="modal">
-    <div class="modal-content" style="max-width: 800px;">
-        <a href="#" title="Close" class="modal-close">&times;</a>
-        <h1 style="color: #a32a2c; text-align: center;">Academic Continuation Guidelines</h1>
-        <p style="text-align: center; color: #555;">Minimum marks and unit requirements to ensure satisfactory academic standing.</p>
-        
-        <p style="font-style: italic; color: #777;">
-            To ensure academic excellence and timely graduation, students must adhere to the following minimum standards (Note: Specific grades vary per semester and college policy; these are general university guidelines).
-        </p>
+    <div class="modal-content">
+        <a href="#" title="Close" class="modal-close">&times;</a>
+        <h1 style="color: #a32a2c; text-align: center;">Continuation Policy for IT Students</h1>
+        <p style="text-align: center; color: #555;">Policies regarding eligibility for IT 407P (OJT) and graduation.</p>
 
-        <table class="continuation-table">
-            <thead>
-                <tr>
-                    <th style="width: 30%;">Requirement</th>
-                    <th style="width: 30%;">Minimum Mark</th>
-                    <th style="width: 40%;">Policy Detail</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>**Minimum Passing Mark (Per Subject)**</td>
-                    <td style="text-align: center;">**75%** (or Grade Point Equivalent of **3.0** or **P** for Pass)</td>
-                    <td>Any grade below this (e.g., 5.0 or 69%) is considered a failure and requires re-enrollment.</td>
-                </tr>
-                <tr>
-                    <td>**General Weighted Average (GWA)**</td>
-                    <td style="text-align: center;">Minimum **2.75** (or specified GWA equivalent)</td>
-                    <td>Students must maintain the retention GWA per semester/year. Failure to do so may result in academic probation.</td>
-                </tr>
-                <tr>
-                    <td>**Major Subject Minimum**</td>
-                    <td style="text-align: center;">Minimum **2.0** (or higher, e.g., 85%)</td>
-                    <td>For core professional subjects, a higher minimum may be enforced to proceed to more advanced, prerequisite-dependent courses.</td>
-                </tr>
-                <tr>
-                    <td>**Maximum Failed Units**</td>
-                    <td style="text-align: center;">Not more than **9 Units** of failure per academic year.</td>
-                    <td>Exceeding the maximum allowed failed units can lead to academic disqualification or mandatory course shifting.</td>
-                </tr>
-            </tbody>
-        </table>
-    </div>
+        <h2 style="color: #333; border-bottom: 2px solid #a32a2c; margin-top: 30px;">OJT (IT 407P) Requirements and Conditions</h2>
+        <table class="continuation-table">
+            <thead>
+                <tr>
+                    <th colspan="2">Eligibility for On-the-Job Training (IT 407P)</th>
+                </tr>
+                <tr>
+                    <th width="35%">Requirement/Condition</th>
+                    <th width="65%">Details</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Duration</td>
+                    <td>The entire duration of the OJT is equivalent to <strong>486 hours</strong>.</td>
+                </tr>
+                <tr>
+                    <td>Prerequisites</td>
+                    <td>Must have passed and completed <strong>all</strong> subjects from <strong>1st year to 3rd year</strong> with <strong>no failing grades</strong>.</td>
+                </tr>
+                <tr>
+                    <td>Failing a Subject</td>
+                    <td>Failure in <strong>any subject</strong> (General Education or Professional) in the first three years will <strong>disqualify</strong> the student from enrolling in the OJT course during their 4th year.</td>
+                </tr>
+                <tr>
+                    <td>IT Research 2</td>
+                    <td>The student must be <strong>enrolled</strong> in <strong>IT Research 2 (IT 401T)</strong>, with the <strong>Capstone Project</strong> approved and endorsed by the panel and the Head/Dean.</td>
+                </tr>
+                <tr>
+                    <td>IT 406T</td>
+                    <td>A passing grade in <strong>IT 406T (Capstone Project)</strong> is <strong>required</strong> to be qualified to enroll in IT 407P.</td>
+                </tr>
+                <tr>
+                    <td>IT 404T</td>
+                    <td>A passing grade in <strong>IT 404T (Technopreneurship)</strong> is <strong>required</strong> to be qualified to enroll in IT 407P.</td>
+                </tr>
+                <tr>
+                    <td>Other Subjects</td>
+                    <td>The student must be enrolled in all other remaining subjects during the first semester of the 4th year, including <strong>IT 402T, IT 403T, and IT 405T</strong>.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <p style="font-size: 14px; color: #a32a2c; font-weight: bold; margin-top: 30px;">
+            Disclaimer: This continuation table and information are for <strong>pre-evaluation purposes only</strong>. Official enrollment in IT 407P (OJT) is subject to the final approval and endorsement of the College Dean and the University Registrar's Office.
+        </p>
+    </div>
 </div>
-<script async type='module' src='https://interfaces.zapier.com/assets/web-components/zapier-interfaces/zapier-interfaces.esm.js'></script>
-<zapier-interfaces-chatbot-embed is-popup='true' chatbot-id='cmhlivib9000buccxhflfe6tp'></zapier-interfaces-chatbot-embed>
+
 </body>
 </html>
-
-
