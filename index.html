@@ -25,19 +25,23 @@
             pointer-events: auto;
         }
 
-        /* Modal content box styling (Adjusted to 5% margin-top as per previous request) */
+        /* Modal content box styling */
         .modal-content {
             width: 80%;
             max-width: 700px;
             position: relative;
-            margin: 5% auto; /* LIFTED HIGHER */
+            /* ADJUSTMENT HERE: Changed 10% to 5% to lift the modal up */
+            margin: 5% auto;
             padding: 30px;
             background: #fff;
             border-radius: 8px;
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.5);
+            /* ADJUSTMENT HERE: Increased max-height to 90% of viewport to allow more content visibility */
             max-height: 90vh; /* Limit height */
             overflow-y: auto; /* Enable scrolling for content */
         }
+
+        /* Close button styling */
         .modal-close {
             position: absolute;
             top: 10px;
@@ -50,6 +54,7 @@
         .modal-close:hover {
             color: #777;
         }
+
         /* Specific styles for the content within the modal */
         .modal h2 {
             color: #a32a2c; /* UB Primary Color */
@@ -94,9 +99,6 @@
             background-color: #f0f0f5; /* Light grey background */
             border-radius: 8px;
             padding: 10px;
-            width: 90%; /* Match width of container below */
-            max-width: 800px; /* Match max-width of container below */
-            margin: 40px auto 0 auto; /* Added margin for spacing */
         }
         .tab {
             padding: 15px 30px;
@@ -180,14 +182,7 @@
                 <p style="font-size: 18px; color: #555; margin-bottom: 30px;">
                     Connecting technology, creativity, and innovation —<br>all in one platform.
                 </p>
-                
-                                <div class="tab-container">
-                    <a href="#subjects-modal" class="tab tab-inactive">Subjects</a>
-                    <a href="#prerequisites-modal" class="tab tab-inactive">Prerequisites</a>
-                    <a href="#capstone-modal" class="tab tab-inactive">Capstone</a>
-                    <a href="#continuation-modal" class="tab tab-active">Continuation</a>
-                </div>
-                                <table width="90%" align="center" border="0" cellpadding="20" cellspacing="0" style="max-width: 800px; text-align: left; background-color: #f9f9f9; border-radius: 8px; margin-top: 40px;">
+                <table width="90%" align="center" border="0" cellpadding="20" cellspacing="0" style="max-width: 800px; text-align: left; background-color: #f9f9f9; border-radius: 8px;">
                     <tr>
                         <td>
                             <h2 style="color: #a32a2c; margin-top: 0; border-bottom: 2px solid #a32a2c; padding-bottom: 5px;">About CITEC</h2>
@@ -209,7 +204,18 @@
                 </td>
         </tr>
 
-                        <tr>
+        <tr>
+            <td align="center" style="padding: 20px 20px 80px;">
+                <div class="tab-container" style="width: 90%; max-width: 800px;">
+                    <a href="#subjects-modal" class="tab tab-inactive">Subjects</a>
+                    <a href="#prerequisites-modal" class="tab tab-inactive">Prerequisites</a>
+                    <a href="#capstone-modal" class="tab tab-inactive">Capstone</a>
+                    <a href="#continuation-modal" class="tab tab-active">Continuation</a>
+                </div>
+                </td>
+        </tr>
+
+        <tr>
             <td align="center" style="padding: 20px; font-size: 14px; color: #6c757d; border-top: 1px solid #eee;">
                 &copy; 2025 University of Batangas Learning Center | GCIT / CITEC
             </td>
